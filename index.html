@@ -1,0 +1,1494 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Shades of Trades — a content audit for Apoorva Sharma</title>
+<style>
+:root{
+  color-scheme: light;
+  --surface-1:rgba(255,255,255,.78); --plane:transparent; --base:#f6f7fa;
+  --glass:blur(12px) saturate(120%);
+  --ink-1:#0b0b0b; --ink-2:#52514e; --ink-3:#898781;
+  --grid:rgba(11,11,11,.10); --axis:rgba(11,11,11,.20); --ring:rgba(11,11,11,0.12);
+  --s1:#2a78d6; --s2:#eb6834; --s3:#1baf7a; --s4:#eda100;
+  --seq-700:#0d366b; --seq-550:#1c5cab; --seq-450:#2a78d6; --seq-300:#6da7ec;
+  --good:#0ca30c; --warning:#fab219; --serious:#ec835a; --critical:#d03b3b;
+  --good-text:#006300;
+  --wash:rgba(42,120,214,0.07);
+  --radius:14px;
+  --font:system-ui,-apple-system,"Segoe UI",sans-serif;
+}
+:root[data-theme="dark"]{
+  color-scheme: dark;
+  --surface-1:rgba(255,255,255,.055); --plane:transparent; --base:#070a10;
+  --ink-1:#ffffff; --ink-2:#c3c2b7; --ink-3:#898781;
+  --grid:rgba(255,255,255,.09); --axis:rgba(255,255,255,.16); --ring:rgba(255,255,255,0.13);
+  --s1:#3987e5; --s2:#d95926; --s3:#199e70; --s4:#c98500;
+  --seq-700:#9ec5f4; --seq-550:#5598e7; --seq-450:#3987e5; --seq-300:#256abf;
+  --good-text:#0ca30c;
+  --wash:rgba(57,135,229,0.12);
+}
+*{box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+html{ background:var(--base); }
+body{
+  margin:0; background:transparent; color:var(--ink-1);
+  font-family:var(--font); font-size:16px; line-height:1.6;
+  -webkit-font-smoothing:antialiased;
+}
+a{color:var(--s1);}
+h1,h2,h3,h4{line-height:1.25; margin:0; font-weight:650; letter-spacing:-0.015em;}
+h1{font-size:clamp(28px,4.4vw,44px); letter-spacing:-0.03em;}
+h2{font-size:clamp(21px,2.6vw,28px); letter-spacing:-0.02em;}
+h3{font-size:18px;}
+p{margin:0 0 14px;}
+.wrap{max-width:1080px; margin:0 auto; padding:0 22px;}
+
+/* ---------- top bar ---------- */
+.topbar{
+  position:sticky; top:0; z-index:100; background:color-mix(in srgb, var(--base) 96%, transparent);
+  backdrop-filter:blur(20px) saturate(140%); -webkit-backdrop-filter:blur(20px) saturate(140%);
+  border-bottom:1px solid var(--ring);
+}
+.topbar-in{display:flex; align-items:center; gap:18px; height:58px;}
+.brand{font-weight:680; font-size:14.5px; letter-spacing:-0.01em; white-space:nowrap;}
+.brand span{color:var(--ink-3); font-weight:500;}
+.navlinks{display:flex; gap:4px; margin-left:auto; overflow-x:auto; scrollbar-width:none;}
+.navlinks::-webkit-scrollbar{display:none;}
+.navlinks a{
+  font-size:13px; color:var(--ink-2); text-decoration:none; padding:6px 10px;
+  border-radius:8px; white-space:nowrap;
+}
+.navlinks a:hover{background:var(--wash); color:var(--ink-1);}
+.iconbtn{
+  border:1px solid var(--ring); background:var(--surface-1); color:var(--ink-2);
+  width:34px; height:34px; border-radius:9px; cursor:pointer; font-size:15px;
+  display:grid; place-items:center; flex:none;
+}
+.iconbtn:hover{color:var(--ink-1); border-color:var(--axis);}
+
+
+/* ---------- full-page Scanner field (vanilla WebGL2 port of React Bits <Scanner />) ---------- */
+.scanner-band{
+  position:fixed; inset:0; z-index:0; pointer-events:none;
+}
+.scanner-container{ position:absolute; inset:0; width:100%; height:100%; overflow:hidden; }
+.scanner-container canvas{ display:block; width:100%; height:100%; }
+.scanner-scrim{
+  position:absolute; inset:0; pointer-events:none;
+  background:
+    radial-gradient(120% 70% at 50% 0%, rgba(7,10,16,.30) 0%, rgba(7,10,16,.66) 55%, rgba(7,10,16,.78) 100%);
+}
+:root[data-theme="light"] .scanner-scrim{
+  background:
+    radial-gradient(120% 70% at 50% 0%, rgba(246,247,250,.62) 0%, rgba(246,247,250,.80) 55%, rgba(246,247,250,.86) 100%);
+}
+/* everything above the field */
+.herowrap, .wrap, footer{ position:relative; z-index:1; }
+/* the bar stays pinned above everything, including the scan field */
+.topbar{ position:sticky; top:0; z-index:100; }
+
+/* the hero sits on the field like the rest of the page — no separate band */
+.herowrap .hero{ padding:76px 0 44px; }
+
+/* ---------- hero ---------- */
+.hero{padding:56px 0 34px;}
+.eyebrow{
+  font-size:12px; letter-spacing:.10em; text-transform:uppercase;
+  color:var(--ink-3); font-weight:620; margin-bottom:14px;
+}
+.lede{font-size:19px; color:var(--ink-2); max-width:60ch; margin-top:16px;}
+.meta{display:flex; flex-wrap:wrap; gap:8px; margin-top:22px;}
+.chip{
+  font-size:12.5px; padding:4px 11px; border-radius:999px;
+  border:1px solid var(--ring); color:var(--ink-2); background:var(--surface-1);
+  backdrop-filter:var(--glass); -webkit-backdrop-filter:var(--glass);
+}
+.chip.verified{color:var(--s1); border-color:color-mix(in srgb,var(--s1) 35%,transparent);}
+.chip.alert{color:var(--critical); border-color:color-mix(in srgb,var(--critical) 40%,transparent);}
+
+/* ---------- callout ---------- */
+.callout{
+  backdrop-filter:var(--glass); -webkit-backdrop-filter:var(--glass);
+  background:var(--surface-1); border:1px solid var(--ring); border-left:3px solid var(--warning);
+  border-radius:var(--radius); padding:18px 20px; margin:30px 0 0; font-size:14.5px; color:var(--ink-2);
+}
+.callout strong{color:var(--ink-1);}
+.callout .ct{font-size:13px; font-weight:650; color:var(--ink-1); display:flex; gap:8px; align-items:center; margin-bottom:8px;}
+
+/* ---------- sections ---------- */
+section{padding:46px 0 10px; scroll-margin-top:86px; position:relative;}
+/* subtle hairline between sections */
+section + section::before{
+  content:''; position:absolute; top:0; left:0; right:0; height:1px;
+  background:linear-gradient(90deg,
+    transparent 0%,
+    color-mix(in srgb, var(--ink-3) 34%, transparent) 18%,
+    color-mix(in srgb, var(--ink-3) 34%, transparent) 82%,
+    transparent 100%);
+}
+/* and a small marker where the number sits */
+.sec-head .num{ position:relative; }
+.sec-head .num::before{
+  content:''; position:absolute; left:-14px; top:50%; width:6px; height:6px; margin-top:-3px;
+  border-radius:50%; background:var(--s1); opacity:.55;
+}
+footer{ position:relative; }
+footer::before{
+  content:''; position:absolute; top:0; left:0; right:0; height:1px;
+  background:linear-gradient(90deg, transparent, color-mix(in srgb, var(--ink-3) 34%, transparent) 20%,
+    color-mix(in srgb, var(--ink-3) 34%, transparent) 80%, transparent);
+}
+.sec-head{margin-bottom:26px;}
+.sec-head .num{
+  font-size:12px; font-weight:680; color:var(--ink-3); letter-spacing:.08em; display:block; margin-bottom:8px;
+}
+.sec-head p{color:var(--ink-2); max-width:62ch; margin-top:10px; font-size:15px;}
+
+/* ---------- stat tiles ---------- */
+.tiles{display:grid; grid-template-columns:repeat(auto-fit,minmax(178px,1fr)); gap:12px;}
+.tile{
+  backdrop-filter:var(--glass); -webkit-backdrop-filter:var(--glass);
+  background:var(--surface-1); border:1px solid var(--ring); border-radius:var(--radius);
+  padding:17px 18px;
+}
+.tile .k{font-size:11.5px; letter-spacing:.05em; text-transform:uppercase; color:var(--ink-3); font-weight:620;}
+.tile .v{font-size:31px; font-weight:660; letter-spacing:-0.03em; margin:7px 0 3px; line-height:1;}
+.tile .d{font-size:12.5px; color:var(--ink-2);}
+.tile .v.bad{color:var(--critical);} .tile .v.ok{color:var(--good-text);}
+
+/* ---------- table ---------- */
+.tblwrap{
+  backdrop-filter:var(--glass); -webkit-backdrop-filter:var(--glass);
+  background:var(--surface-1); border:1px solid var(--ring); border-radius:var(--radius); overflow:hidden;
+}
+table{width:100%; border-collapse:collapse; font-size:14px;}
+th,td{text-align:left; padding:11px 16px; border-bottom:1px solid var(--grid);}
+th{
+  font-size:11.5px; text-transform:uppercase; letter-spacing:.06em; color:var(--ink-3);
+  font-weight:640; background:color-mix(in srgb,var(--base) 42%, transparent);
+}
+tr:last-child td{border-bottom:none;}
+td.num{font-variant-numeric:tabular-nums;}
+.dot{width:8px;height:8px;border-radius:50%;display:inline-block;margin-right:7px;vertical-align:1px;}
+.st{font-size:12.5px; font-weight:600; display:inline-flex; align-items:center; gap:6px;}
+.st.crit{color:var(--critical);} .st.warn{color:var(--serious);} .st.good{color:var(--good-text);}
+
+/* ---------- charts ---------- */
+.card{
+  backdrop-filter:var(--glass); -webkit-backdrop-filter:var(--glass);
+  background:var(--surface-1); border:1px solid var(--ring); border-radius:var(--radius);
+  padding:22px; margin-top:6px;
+}
+.card-head{display:flex; align-items:flex-start; gap:14px; flex-wrap:wrap; margin-bottom:6px;}
+.card-title{font-size:16px; font-weight:640;}
+.card-sub{font-size:13px; color:var(--ink-2); margin-top:3px; max-width:64ch;}
+.legend{display:flex; gap:15px; flex-wrap:wrap; margin:14px 0 18px; font-size:12.5px; color:var(--ink-2);}
+.legend i{width:11px;height:11px;border-radius:3px;display:inline-block;margin-right:7px;vertical-align:-1px;}
+.toolbtn{
+  margin-left:auto; font-size:12.5px; padding:5px 11px; border-radius:8px; cursor:pointer;
+  border:1px solid var(--ring); background:transparent; color:var(--ink-2); font-family:var(--font);
+}
+.toolbtn:hover{background:var(--wash); color:var(--ink-1);}
+
+.bars{display:flex; flex-direction:column; gap:7px;}
+.brow{display:grid; grid-template-columns:minmax(120px,240px) 1fr; gap:14px; align-items:center; cursor:default;}
+.blab{font-size:13px; color:var(--ink-2); text-align:right; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;}
+.btrack{position:relative; height:22px; display:flex; align-items:center; gap:9px;}
+.bfill{
+  height:16px; border-radius:0 4px 4px 0; transition:width .55s cubic-bezier(.2,.7,.3,1), filter .15s;
+  min-width:2px;
+}
+.brow:hover .bfill{filter:brightness(1.12);}
+.bval{font-size:12.5px; font-variant-numeric:tabular-nums; color:var(--ink-2); white-space:nowrap;}
+.brow:hover .bval, .brow:hover .blab{color:var(--ink-1);}
+.axisline{height:1px; background:var(--axis); margin:12px 0 6px;}
+.ticks{display:flex; justify-content:space-between; font-size:11.5px; color:var(--ink-3); font-variant-numeric:tabular-nums;}
+
+/* stacked mix */
+.mixrow{margin-bottom:20px;}
+.mixlab{font-size:13px; font-weight:620; margin-bottom:8px; display:flex; gap:10px; align-items:baseline;}
+.mixlab em{font-style:normal; font-weight:500; font-size:12px; color:var(--ink-3);}
+.stack{display:flex; height:38px; gap:2px;}
+.seg{
+  display:grid; place-items:center; font-size:12px; font-weight:640; color:#fff;
+  transition:flex-basis .55s cubic-bezier(.2,.7,.3,1); overflow:hidden; white-space:nowrap;
+  border-radius:3px;
+}
+.seg:first-child{border-radius:5px 3px 3px 5px;} .seg:last-child{border-radius:3px 5px 5px 3px;}
+
+/* tooltip */
+#tip{
+  position:fixed; pointer-events:none; opacity:0; transition:opacity .12s;
+  background:var(--ink-1); color:var(--surface-1); font-size:12.5px; line-height:1.45;
+  padding:8px 11px; border-radius:8px; z-index:200; max-width:260px;
+  box-shadow:0 6px 22px rgba(0,0,0,.18);
+}
+#tip b{display:block; font-size:13px; margin-bottom:2px;}
+
+
+/* ---------- accordion gallery (vanilla port of React Bits AccordionGallery) ---------- */
+.agal{
+  --agal-gap:8px; --agal-radius:12px; --agal-accent:var(--s1);
+  display:flex; gap:var(--agal-gap); height:430px; width:100%;
+  margin-top:6px;
+}
+.apanel{
+  position:relative; flex:0 0 auto; overflow:hidden; border-radius:var(--agal-radius);
+  cursor:pointer; background:rgba(0,0,0,.35); border:1px solid var(--ring);
+  transition:flex-basis .62s cubic-bezier(.4,0,.2,1), box-shadow .3s;
+  min-width:0;
+}
+.apanel:focus-visible{outline:2px solid var(--agal-accent); outline-offset:3px;}
+.apanel .amedia{
+  position:absolute; inset:0; width:100%; height:100%; object-fit:cover; object-position:center 28%;
+  transform:scale(1.18) translateX(6%);
+  filter:grayscale(1) brightness(.72) contrast(1.02);
+  transition:transform .62s cubic-bezier(.4,0,.2,1), filter .5s ease;
+}
+.apanel.on .amedia{ transform:scale(1.02) translateX(0); filter:grayscale(0) brightness(.92); }
+.apanel.noimg{background:linear-gradient(160deg, #1c3f6b 0%, #10243d 100%);}
+.apanel.noimg.on{background:linear-gradient(160deg, #2a78d6 0%, #16406f 100%);}
+.apanel .ashade{
+  position:absolute; inset:0;
+  background:linear-gradient(to top, rgba(0,0,0,.86) 0%, rgba(0,0,0,.42) 38%, rgba(0,0,0,.05) 72%);
+  transition:opacity .5s;
+}
+.apanel .arank{
+  position:absolute; top:12px; left:12px; z-index:3;
+  font-size:11.5px; font-weight:700; letter-spacing:.06em;
+  color:#fff; background:rgba(0,0,0,.55); backdrop-filter:blur(6px);
+  border:1px solid rgba(255,255,255,.22); padding:3px 9px; border-radius:999px;
+}
+.apanel.on .arank{background:var(--agal-accent); border-color:transparent;}
+.acontent{position:absolute; left:0; right:0; bottom:0; padding:16px; z-index:2; color:#fff;}
+/* collapsed: vertical label */
+.alabel-v{
+  position:absolute; bottom:16px; left:50%; transform:translateX(-50%);
+  writing-mode:vertical-rl; transform-origin:center; rotate:180deg;
+  font-size:13px; font-weight:600; color:#fff; white-space:nowrap; z-index:3;
+  text-shadow:0 1px 6px rgba(0,0,0,.7); max-height:78%; overflow:hidden; text-overflow:ellipsis;
+  opacity:1; transition:opacity .3s;
+}
+.apanel.on .alabel-v{opacity:0; pointer-events:none;}
+.alabel-h{
+  opacity:0; transform:translateY(10px); transition:opacity .45s .12s, transform .45s .12s;
+}
+.apanel.on .alabel-h{opacity:1; transform:none;}
+.alabel-h .av{
+  font-size:26px; font-weight:700; letter-spacing:-.02em; line-height:1; margin-bottom:6px;
+  font-variant-numeric:tabular-nums;
+}
+.alabel-h .at{font-size:14.5px; font-weight:600; line-height:1.35; margin-bottom:8px;}
+.alabel-h .am{font-size:12.5px; color:rgba(255,255,255,.82); display:flex; gap:9px; align-items:center; flex-wrap:wrap;}
+.atag{
+  font-size:10.5px; font-weight:700; letter-spacing:.05em; text-transform:uppercase;
+  padding:2px 8px; border-radius:999px; border:1px solid rgba(255,255,255,.3);
+}
+.atag.spec{background:rgba(255,255,255,.16);}
+.agal-note{font-size:12.5px; color:var(--ink-3); margin-top:12px;}
+.agal-note kbd{
+  font:inherit; font-size:11.5px; border:1px solid var(--ring); border-bottom-width:2px;
+  padding:1px 6px; border-radius:5px; background:var(--surface-1); color:var(--ink-2);
+}
+@media (max-width:640px){
+  .agal{flex-direction:column; height:auto;}
+  .apanel{height:96px; transition:height .55s cubic-bezier(.4,0,.2,1);}
+  .apanel.on{height:290px;}
+  .alabel-v{writing-mode:horizontal-tb; rotate:0deg; left:16px; transform:none; bottom:14px;}
+}
+@media (prefers-reduced-motion:reduce){
+  .apanel,.apanel .amedia,.alabel-h,.bfill,.seg{transition:none!important;}
+}
+
+
+/* ---------- disclaimer ---------- */
+.disclaimer{
+  margin-top:26px; max-width:70ch; font-size:13.5px; line-height:1.6; color:var(--ink-3);
+  padding-left:14px; border-left:2px solid var(--axis);
+}
+.disclaimer span{
+  color:var(--ink-2); font-weight:650; letter-spacing:.04em; text-transform:uppercase;
+  font-size:11px; margin-right:8px;
+}
+
+/* ---------- pinned nav: active state + hover ---------- */
+.navlinks a{ position:relative; transition:color .2s ease, background .2s ease; }
+.navlinks a::after{
+  content:''; position:absolute; left:10px; right:10px; bottom:3px; height:2px; border-radius:2px;
+  background:var(--s1); transform:scaleX(0); transform-origin:center;
+  transition:transform .28s cubic-bezier(.3,.8,.3,1), opacity .2s; opacity:.9;
+}
+.navlinks a:hover{ color:var(--ink-1); background:var(--wash); }
+.navlinks a:hover::after{ transform:scaleX(.55); }
+.navlinks a.active{ color:var(--ink-1); background:var(--wash); font-weight:600; }
+.navlinks a.active::after{ transform:scaleX(1); }
+.topbar{ box-shadow:0 1px 0 rgba(0,0,0,0), 0 8px 28px rgba(0,0,0,0); transition:box-shadow .3s, background .3s; }
+.topbar.stuck{ box-shadow:0 10px 30px rgba(0,0,0,.28); }
+:root[data-theme="light"] .topbar.stuck{ box-shadow:0 8px 26px rgba(11,11,11,.10); }
+/* thin scroll-progress line along the bottom of the bar */
+.topbar .progress{
+  position:absolute; left:0; bottom:-1px; height:2px; width:0%;
+  background:linear-gradient(90deg, var(--s1), var(--s3)); transition:width .12s linear;
+}
+
+/* ---------- findings: hover + single-open accordion ---------- */
+.item{ transition:border-color .25s ease, transform .25s cubic-bezier(.3,.8,.3,1), box-shadow .25s ease; }
+.item:hover{ transform:translateY(-2px); box-shadow:0 10px 26px rgba(0,0,0,.22); border-color:color-mix(in srgb,var(--s1) 26%,var(--ring)); }
+:root[data-theme="light"] .item:hover{ box-shadow:0 10px 26px rgba(11,11,11,.08); }
+.item.open:hover{ transform:none; }
+.ihead{ transition:background .22s ease; }
+.ihead .rank{ transition:background .25s ease, color .25s ease, transform .25s cubic-bezier(.3,.8,.3,1); }
+.item:hover .rank{ transform:scale(1.08); }
+.item.open .rank{ background:var(--s1); color:#fff; }
+.ihead .ititle{ transition:color .2s ease; }
+.item:hover .ititle{ color:var(--ink-1); }
+.caret{ transition:transform .3s cubic-bezier(.3,.8,.3,1), color .2s; }
+.item:hover .caret{ color:var(--ink-2); }
+/* animated open/close */
+.ibody{ display:block; overflow:hidden; max-height:0; opacity:0; padding-top:0; padding-bottom:0;
+  transition:max-height .42s cubic-bezier(.3,.8,.3,1), opacity .28s ease, padding-bottom .42s ease; }
+.item.open .ibody{ opacity:1; padding-bottom:20px; }
+@media (prefers-reduced-motion:reduce){
+  .item,.ibody,.navlinks a::after,.ihead .rank{ transition:none!important; }
+  .item:hover{ transform:none!important; }
+}
+
+/* ---------- accordion ---------- */
+.acc{display:flex; flex-direction:column; gap:10px;}
+.item{
+  backdrop-filter:var(--glass); -webkit-backdrop-filter:var(--glass);background:var(--surface-1); border:1px solid var(--ring); border-radius:var(--radius); overflow:hidden;}
+.item.open{border-color:color-mix(in srgb,var(--s1) 32%,var(--ring));}
+.ihead{
+  display:flex; gap:14px; align-items:center; padding:16px 18px; cursor:pointer; user-select:none;
+}
+.ihead:hover{background:var(--wash);}
+.rank{
+  flex:none; width:26px; height:26px; border-radius:8px; display:grid; place-items:center;
+  font-size:12.5px; font-weight:680; background:var(--wash); color:var(--s1);
+}
+.ititle{font-size:15.5px; font-weight:620; flex:1; letter-spacing:-0.01em;}
+.sev{
+  font-size:11px; font-weight:660; letter-spacing:.04em; text-transform:uppercase;
+  padding:3px 9px; border-radius:999px; white-space:nowrap; flex:none;
+  display:inline-flex; align-items:center; gap:5px;
+}
+.sev.critical{color:var(--critical); background:color-mix(in srgb,var(--critical) 12%,transparent);}
+.sev.high{color:var(--serious); background:color-mix(in srgb,var(--serious) 15%,transparent);}
+.sev.medium{color:var(--ink-2); background:color-mix(in srgb,var(--ink-3) 15%,transparent);}
+.caret{flex:none; color:var(--ink-3); transition:transform .22s; font-size:13px;}
+.item.open .caret{transform:rotate(90deg);}
+.ibody{ padding-left:18px; padding-right:18px; font-size:14.5px; color:var(--ink-2); }
+.ibody h4{font-size:12px; text-transform:uppercase; letter-spacing:.07em; color:var(--ink-3); margin:18px 0 8px;}
+.ibody ul{margin:0 0 12px; padding-left:19px;} .ibody li{margin-bottom:7px;}
+.fix{
+  border-left:2px solid var(--good); background:color-mix(in srgb,var(--good) 6%,transparent);
+  padding:12px 15px; border-radius:0 9px 9px 0; margin-top:6px; color:var(--ink-1); font-size:14px;
+}
+.quote{
+  border-left:2px solid var(--axis); padding-left:14px; color:var(--ink-2); font-style:italic; margin:12px 0;
+}
+
+/* ---------- tabs ---------- */
+.tabs{display:flex; gap:6px; flex-wrap:wrap; margin-bottom:16px;}
+.tab{
+  font-family:var(--font); font-size:13.5px; padding:8px 15px; border-radius:10px; cursor:pointer;
+  border:1px solid var(--ring); background:var(--surface-1); color:var(--ink-2); font-weight:560;
+}
+.tab:hover{color:var(--ink-1);}
+.tab.active{background:var(--s1); border-color:var(--s1); color:#fff;}
+.filters{display:flex; gap:6px; flex-wrap:wrap; margin-bottom:14px; align-items:center;}
+.filters .fl{font-size:12px; color:var(--ink-3); margin-right:4px;}
+.fchip{
+  font-family:var(--font); font-size:12.5px; padding:5px 11px; border-radius:999px; cursor:pointer;
+  border:1px solid var(--ring); background:transparent; color:var(--ink-2);
+  display:inline-flex; align-items:center; gap:7px;
+}
+.fchip.off{opacity:.4;}
+.fchip i{width:9px;height:9px;border-radius:50%;display:inline-block;}
+.weekmeta{font-size:13px; color:var(--ink-2); margin-bottom:14px;}
+.pill{
+  font-size:11px; font-weight:640; padding:2px 8px; border-radius:999px; white-space:nowrap;
+  display:inline-flex; align-items:center; gap:5px; color:var(--ink-1);
+  background:color-mix(in srgb, var(--pc) 16%, transparent);
+}
+.pill i{width:7px;height:7px;border-radius:50%;background:var(--pc);}
+.hook{font-weight:540; color:var(--ink-1);}
+
+/* ---------- checklist ---------- */
+.checks{display:grid; grid-template-columns:repeat(auto-fit,minmax(270px,1fr)); gap:10px;}
+.check{
+  backdrop-filter:var(--glass); -webkit-backdrop-filter:var(--glass);
+  background:var(--surface-1); border:1px solid var(--ring); border-radius:11px; padding:14px 16px;
+  font-size:14px; color:var(--ink-2); display:flex; gap:11px; align-items:flex-start;
+}
+.check b{color:var(--ink-1); font-weight:620; display:block; font-size:14px; margin-bottom:2px;}
+.check .bx{color:var(--ink-3); flex:none; font-size:13px; margin-top:2px;}
+
+/* ---------- oneliner ---------- */
+.kicker{
+  backdrop-filter:var(--glass); -webkit-backdrop-filter:var(--glass);
+  background:var(--surface-1); border:1px solid var(--ring); border-radius:var(--radius);
+  padding:30px 32px; margin-top:6px;
+}
+.kicker p{font-size:19px; color:var(--ink-1); line-height:1.5; margin:0; letter-spacing:-0.01em;}
+.kicker p + p{margin-top:14px; font-size:16px; color:var(--ink-2);}
+
+footer{
+  margin-top:60px; padding:34px 0 60px;
+  font-size:13px; color:var(--ink-3);
+}
+footer a{color:var(--ink-2);}
+footer .srcs{display:flex; flex-wrap:wrap; gap:6px 18px; margin:10px 0 20px;}
+
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);}
+@media (max-width:640px){
+  .brow{grid-template-columns:1fr; gap:2px;}
+  .blab{text-align:left;}
+  .hero{padding:38px 0 26px;}
+  .navlinks{display:none;}
+}
+@media print{
+  .topbar,.toolbtn,.tabs,.filters,.scanner-band{display:none!important;}
+  .ibody{display:block!important;}
+  html{background:#fff;} body{color:#000;}
+  .card,.tile,.tblwrap,.item,.check,.kicker,.callout{background:#fff!important; backdrop-filter:none!important;}
+}
+</style>
+</head>
+<body>
+<div id="tip" role="status" aria-live="polite"></div>
+
+<div class="topbar">
+  <div class="wrap topbar-in">
+    <div class="brand">The Shades of Trades <span>· Audit for Apoorva</span></div>
+    <nav class="navlinks">
+      <a href="#snapshot">Snapshot</a>
+      <a href="#fixes">Six fixes</a>
+      <a href="#evidence">Evidence</a>
+      <a href="#working">What works</a>
+      <a href="#plan">30-day plan</a>
+      <a href="#measure">Measurement</a>
+    </nav>
+    <button class="iconbtn" id="themeBtn" aria-label="Toggle dark mode" title="Toggle theme">◐</button>
+  </div>
+  <div class="progress" id="progress" aria-hidden="true"></div>
+</div>
+
+<div class="scanner-band" aria-hidden="true">
+  <div class="scanner-container" id="scanner"></div>
+  <div class="scanner-scrim"></div>
+</div>
+
+<div class="herowrap">
+  <div class="wrap">
+
+  <header class="hero">
+    <div class="eyebrow">An unsolicited content audit · updated 18 August 2026</div>
+    <h1>@theshadesoftrades</h1>
+    <p class="lede">Hi Apoorva — I'm Samyukth. I'd like to work on your content, so rather than send you a CV I spent a few days auditing your brand the way I'd work on it. This version is built on your last <strong>108 posts</strong> — real like, comment and play counts — not guesswork.</p>
+    <div class="meta">
+      <span class="chip verified">✓ Verified · 524K followers</span>
+      <span class="chip">Apoorva Sharma · Full-time trader &amp; coach</span>
+      <span class="chip">● Recently switched to private</span>
+      <span class="chip">By Samyukth Bitra · samyukthbitra@gmail.com</span>
+    </div>
+
+    <p class="disclaimer">
+      <span>Disclaimer</span> Take this audit with a pinch of salt — it is built only from the public data visible on your Instagram page, so the real picture in your analytics may well differ. It is a broad outside view of what I think <em>could</em> be done, not a prescription. If you'd rather point at something else entirely, I'm happy to work on whatever you're actually aiming for.
+    </p>
+  </header>
+  </div>
+</div>
+
+<div class="wrap">
+
+  <!-- ============ SNAPSHOT ============ -->
+  <section id="snapshot">
+    <div class="sec-head">
+      <span class="num">01</span>
+      <h2>The snapshot</h2>
+      <p>Five measured numbers that frame everything below. One of them is considerably worse than the public estimates of your account, and one is much better.</p>
+    </div>
+
+    <div class="tiles">
+      <div class="tile"><div class="k">Followers</div><div class="v">524,752</div><div class="d">2,073 posts · 227 following · verified</div></div>
+      <div class="tile"><div class="k">Median reel</div><div class="v">28,996</div><div class="d">plays · across 97 reels since February</div></div>
+      <div class="tile"><div class="k">Reaches this share of you</div><div class="v bad">5.5%</div><div class="d">Median plays ÷ followers</div></div>
+      <div class="tile"><div class="k">Real engagement rate</div><div class="v bad">0.14%</div><div class="d">Measured. Third parties report 0.6%</div></div>
+      <div class="tile"><div class="k">Your best post ever</div><div class="v ok">416K</div><div class="d">32 seconds. An eight-word caption.</div></div>
+    </div>
+
+    <div class="card" style="margin-top:18px; padding:0;">
+      <div class="tblwrap" style="border:none;">
+        <table>
+          <caption class="sr">Channel health across Instagram, YouTube, Threads, X and the website</caption>
+          <thead><tr><th>Channel</th><th>Size</th><th>Cadence</th><th>Health</th></tr></thead>
+          <tbody>
+            <tr><td><span class="dot" style="background:var(--s1)"></span>Instagram</td><td class="num">524,752 · 2,073 posts</td><td>4.0 / week</td><td><span class="st warn">● Median reel reaches 5.5% of you</span></td></tr>
+            <tr><td><span class="dot" style="background:var(--s2)"></span>YouTube</td><td class="num">5.01K subs · 101 videos</td><td>Long-form paused ~1 mo</td><td><span class="st warn">● 7 long-form, ~94 Shorts</span></td></tr>
+            <tr><td><span class="dot" style="background:var(--s3)"></span>Threads</td><td class="num">57K</td><td>Mirrors IG reels</td><td><span class="st warn">● 13–18 likes/post</span></td></tr>
+            <tr><td><span class="dot" style="background:var(--s4)"></span>X</td><td class="num">3,584 · 819 posts</td><td>Last post 14 Jan 2026</td><td><span class="st crit">● Dormant</span></td></tr>
+            <tr><td><span class="dot" style="background:var(--ink-3)"></span>Website</td><td class="num">2 products</td><td>—</td><td><span class="st warn">● No free step in funnel</span></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="card" style="margin-top:14px;">
+      <div class="card-head">
+        <div>
+          <div class="card-title">The audience ladder</div>
+          <div class="card-sub">Everything you've built lives on one rented platform. Almost none of it has become an asset you own — no email list, no community, no subscriber base.</div>
+        </div>
+        <button class="toolbtn" data-table="funnelTable">View as table</button>
+      </div>
+      <div class="bars" id="funnelChart" style="margin-top:16px;"></div>
+      <div class="axisline"></div>
+      <div class="ticks"><span>0</span><span>131K</span><span>262K</span><span>393K</span><span>524K</span></div>
+      <div id="funnelTable" hidden style="margin-top:14px;"></div>
+    </div>
+  </section>
+
+  <!-- ============ FIXES ============ -->
+  <section id="fixes">
+    <div class="sec-head">
+      <span class="num">02</span>
+      <h2>The six things I'd work on first</h2>
+      <p>Ranked by impact, not by effort, and every one of them measured against your last 108 posts. Open any row for the evidence and what I'd actually do.</p>
+    </div>
+
+    <div class="acc" id="acc">
+
+      <div class="item open">
+        <div class="ihead"><span class="rank">1</span><span class="ititle">You tripled your output and your per-post reach halved</span><span class="sev critical">● Critical</span><span class="caret">▶</span></div>
+        <div class="ibody">
+          <p>This is the clearest thing in the data, and I don't think it's visible from the inside — because likes and comments are the numbers you see day to day, and they moved less dramatically than plays did.</p>
+          <div class="tblwrap" style="margin:14px 0;">
+            <table>
+              <thead><tr><th>Month</th><th>Posts</th><th>Median plays</th><th>Median likes</th><th>Total plays</th></tr></thead>
+              <tbody>
+                <tr><td>February</td><td class="num">8</td><td class="num">41,967</td><td class="num">1,001</td><td class="num">357K</td></tr>
+                <tr><td>March</td><td class="num">6</td><td class="num">32,377</td><td class="num">990</td><td class="num">230K</td></tr>
+                <tr><td>April</td><td class="num">12</td><td class="num">36,023</td><td class="num">846</td><td class="num">891K</td></tr>
+                <tr><td>May</td><td class="num">12</td><td class="num">32,341</td><td class="num">876</td><td class="num">449K</td></tr>
+                <tr><td><strong>June</strong></td><td class="num"><strong>26</strong></td><td class="num">22,916</td><td class="num">525</td><td class="num">694K</td></tr>
+                <tr><td><strong>July</strong></td><td class="num"><strong>33</strong></td><td class="num">28,031</td><td class="num">653</td><td class="num">688K</td></tr>
+                <tr><td>Aug (to 17th)</td><td class="num">11</td><td class="num">21,894</td><td class="num">576</td><td class="num">223K</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <p>February to May you published around <strong>10 posts a month</strong> and the median reel did <strong>~35,000 plays</strong>. June to August you published around <strong>30 a month</strong> and the median fell to <strong>~24,000</strong>. Median likes fell further — from about 900 to about 580, a <strong>36% drop</strong>.</p>
+          <p>Worth saying explicitly: <strong>this happened while the account was public and fully discoverable.</strong> It isn't a side-effect of any recent settings change. It's a straightforward volume effect.</p>
+          <h4>Being fair to the other reading</h4>
+          <p>Total monthly reach did rise: roughly 450K a month in the spring against roughly 690K in June and July. So the extra work bought something. But it bought about <strong>50% more total reach for three times the output</strong> — and each individual post now works roughly half as hard as it did in April.</p>
+          <div class="fix"><strong>Cut back to 3 posts a week and put the recovered time into the top of each one.</strong> The evidence says your ceiling isn't set by how often you post — it's set by whether any given post earns distribution. Volume is currently buying diminishing returns and costing each post the attention it deserves.</div>
+        </div>
+      </div>
+
+      <div class="item">
+        <div class="ihead"><span class="rank">2</span><span class="ititle">Your median reel reaches about 5.5% of your own followers</span><span class="sev critical">● Critical</span><span class="caret">▶</span></div>
+        <div class="ibody">
+          <p>Across 97 reels: median <strong>28,996 plays</strong>, quartiles at <strong>20,591</strong> and <strong>40,236</strong>, floor <strong>9,805</strong>, ceiling <strong>416,230</strong>.</p>
+          <p>Against 524,752 followers, the median reel registers plays equal to about <strong>5.5%</strong> of your audience — and plays count repeat views, so the share of real humans reached is lower still.</p>
+          <h4>The engagement rate everyone quotes about you is wrong</h4>
+          <p>Third-party estimators report your engagement rate as <strong>0.6%</strong>. Measured against your actual median post — 701 likes and 16 comments against 524,752 followers — it is <strong>0.14%</strong>. Those tools estimate from a handful of recent posts and tend to flatter large accounts.</p>
+          <p>I mention it because if that figure ever goes into a brand conversation and gets audited, it's an awkward moment. 0.14% is also a very explainable number for an account this size — but it should be the one you're working from.</p>
+          <div class="fix"><strong>Re-baseline on median plays, not likes and not third-party estimates.</strong> Median, because your 416K post drags the mean to 36K while a normal post does 29K. Everything in the plan below is measured against that 29K line.</div>
+        </div>
+      </div>
+
+      <div class="item">
+        <div class="ihead"><span class="rank">3</span><span class="ititle">Selling directly is your worst-performing content — telling the story is among your best</span><span class="sev high">● High</span><span class="caret">▶</span></div>
+        <div class="ibody">
+          <p>This one surprised me, and it's the most immediately usable thing in the audit.</p>
+          <p><strong>Your single worst post of the 108</strong> — 9,805 plays, a third of your median — opens: <em>"I have written a book that has my entire trading strategy…"</em>. Another straight book post, <em>"Get access to the book: Link in bio"</em>, did 14,200. A launch-anniversary post did 16,400.</p>
+          <p>But <em>"One Strategy, One Book &amp; the kind of shift that most traders keep chasing for years"</em> did <strong>103,324</strong> — your second-best post ever. And <em>"This draft, this book was supposed…"</em> did <strong>54,655</strong>.</p>
+          <p>Same product. Roughly a <strong>10× spread</strong>, depending entirely on whether the post announces the thing or tells the story around it.</p>
+          <div class="fix"><strong>Ban the announcement post.</strong> Every product post becomes a story, a lesson or a build-in-public moment that happens to contain the book. Your audience isn't allergic to being sold to — they're allergic to being addressed as an audience being sold to. This alone would meaningfully change what your launches earn.</div>
+        </div>
+      </div>
+
+      <div class="item">
+        <div class="ihead"><span class="rank">4</span><span class="ititle">Repeating yourself is measurably expensive</span><span class="sev high">● High</span><span class="caret">▶</span></div>
+        <div class="ibody">
+          <p>I flagged this before as a hunch. Now there are numbers on it.</p>
+          <ul>
+            <li>The <strong>"when oil is up and war is ongoing… USDINR"</strong> reel ran on <strong>31 March</strong> and did <strong>67,503</strong>. The same reel ran again on <strong>17 August</strong> and did <strong>16,132</strong> — <strong>24%</strong> of the original, and one of your ten weakest posts of the period.</li>
+            <li><strong>"Gold Reversal or Just a Retracement?"</strong> ran on <strong>9 August</strong> (27,500). <strong>"Gold: Retracement or Reversal?"</strong> ran six days later (21,900) — <strong>80%</strong>, and the second one taught nothing the first hadn't.</li>
+          </ul>
+          <p>A reposted reel doesn't restart from zero — it restarts from a lower base, because a large share of the people it would reach have already seen it and swiped past. Instagram reads that as a weak signal.</p>
+          <div class="fix"><strong>A content log with a 90-day rule.</strong> No topic and no cut repeats inside 90 days. If a subject is worth revisiting, it gets a genuinely new angle and a new hook — a follow-up, a reversal, a "what I got wrong". That's a different post, and it performs like one.</div>
+        </div>
+      </div>
+
+      <div class="item">
+        <div class="ihead"><span class="rank">5</span><span class="ititle">What actually travels — and three things that turn out not to matter</span><span class="sev high">● High</span><span class="caret">▶</span></div>
+        <div class="ibody">
+          <p><strong>Your biggest post ever is a live, dated market read.</strong> Posted 2 April, caption in full: <em>"April 3-5, 2026. The Charts tell the truth much early!"</em> — 32 seconds, eight words, <strong>416,230 plays</strong>, 6,450 likes, 180 comments. Fourteen times your median. Nothing else you've published is close.</p>
+          <p><strong>Gold is a modest edge, not a landslide.</strong> Posts naming gold, silver or commodities (n=10) run a median of <strong>34,689</strong> against <strong>28,852</strong> for everything else — about <strong>+20%</strong>, with likes essentially flat. Real, worth leaning into, but a ten-post sample and not the transformation I'd have guessed from your YouTube.</p>
+          <p><strong>Mindset content is not your problem.</strong> By a rough keyword split, your psychology posts run a median of ~30,200 plays and the <em>highest</em> median likes of any group (876). Generic teaching posts with no named market run lowest, at ~22,100. So the fix isn't "less mindset" — it's "less generic".</p>
+          <h4>Three things that don't matter, so stop spending time on them</h4>
+          <ul>
+            <li><strong>Length.</strong> Median plays by duration: under 30s → 28,996 · 30–45s → 30,639 · 45–60s → 29,967 · 60–90s → 27,475 · over 90s → 31,993. Essentially flat. Your median reel is 68 seconds and that's fine.</li>
+            <li><strong>Posting day.</strong> Wednesday leads (34,585) and Monday trails (22,072), but on 8–23 posts a day the noise is larger than the signal. Not worth restructuring around.</li>
+            <li><strong>Carousels and static posts.</strong> 97 of your 108 posts are reels, and reels earn a median of 736 likes against 457 for images and 222 for carousels. Reels-first is already the right call.</li>
+          </ul>
+          <div class="fix"><strong>The pattern across all of it:</strong> what earns you distribution is <em>specificity about a live market</em> — a named instrument, a dated call, a trade you're actually in. Not the format, not the length, not the day. That's a content brief, and it's a narrow enough one to execute against.</div>
+        </div>
+      </div>
+
+      <div class="item">
+        <div class="ihead"><span class="rank">6</span><span class="ititle">One housekeeping note on the account setting</span><span class="sev medium">● Worth a look</span><span class="caret">▶</span></div>
+        <div class="ibody">
+          <p>The account is set to private at the moment. I assume that's deliberate and recent, and none of the analysis above depends on it — every number in this document comes from the period when the account was public.</p>
+          <p>One thing worth knowing, in case it wasn't the intention: Instagram doesn't allow professional accounts to be private, so the switch also moves the account to <strong>personal</strong>. That turns off Insights entirely — reach, saves, shares, demographics, profile visits. It's why sections 06 and 07 flag several metrics as currently unavailable.</p>
+          <div class="fix">If the privacy is temporary, nothing to do. If it's staying for a while, it's worth knowing the measurement layer is switched off alongside it — and that reach to non-followers is paused too. Either way it's a two-tap decision, not a strategy problem.<br><br><em>Platform rules do change; worth confirming in-app rather than taking my word for it.</em></div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ============ EVIDENCE ============ -->
+  <section id="evidence">
+    <div class="sec-head">
+      <span class="num">03</span>
+      <h2>The evidence</h2>
+      <p>108 Instagram posts, 7 February to 17 August 2026. Real play, like and comment counts. Hover anything.</p>
+    </div>
+
+    <div class="card">
+      <div class="card-head">
+        <div>
+          <div class="card-title">Output went up. Reach per post went down.</div>
+          <div class="card-sub">Two views of the same seven months. Posting volume roughly tripled in June; the median reel lost about a third of its plays and the median post lost 36% of its likes.</div>
+        </div>
+        <button class="toolbtn" data-table="monthTable">View as table</button>
+      </div>
+      <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(280px,1fr)); gap:26px; margin-top:18px;">
+        <div>
+          <div style="font-size:12.5px; font-weight:640; color:var(--ink-2); margin-bottom:12px;">Posts published</div>
+          <div class="bars" id="volChart"></div>
+          <div class="axisline"></div>
+          <div class="ticks"><span>0</span><span>17</span><span>33</span></div>
+        </div>
+        <div>
+          <div style="font-size:12.5px; font-weight:640; color:var(--ink-2); margin-bottom:12px;">Median plays per reel</div>
+          <div class="bars" id="medChart"></div>
+          <div class="axisline"></div>
+          <div class="ticks"><span>0</span><span>21K</span><span>42K</span></div>
+        </div>
+      </div>
+      <div id="monthTable" hidden style="margin-top:16px;"></div>
+    </div>
+
+    <div class="card" style="margin-top:14px;">
+      <div class="card-head">
+        <div>
+          <div class="card-title">Where your reels actually land</div>
+          <div class="card-sub">The distribution across 97 reels. The gap between the median and your best post is the whole story — one post did 14× what a normal post does.</div>
+        </div>
+        <button class="toolbtn" data-table="distTable">View as table</button>
+      </div>
+      <div class="bars" id="distChart" style="margin-top:16px;"></div>
+      <div class="axisline"></div>
+      <div class="ticks"><span>0</span><span>104K</span><span>208K</span><span>312K</span><span>416K</span></div>
+      <div id="distTable" hidden style="margin-top:14px;"></div>
+    </div>
+
+    <div class="card" style="margin-top:14px;">
+      <div class="card-head">
+        <div>
+          <div class="card-title">By subject — directional, not decisive</div>
+          <div class="card-sub">A keyword split of 97 reel captions. Treat the ordering as a steer rather than proof: the buckets are crude, and "promo" and "timely" are small samples. The pattern that survives the crudeness is that <em>generic</em> teaching trails everything.</div>
+        </div>
+      </div>
+      <div class="bars" id="topicChart" style="margin-top:16px;"></div>
+      <div class="axisline"></div>
+      <div class="ticks"><span>0</span><span>10K</span><span>20K</span><span>30K</span><span>38K</span></div>
+    </div>
+
+    <div class="card" style="margin-top:14px;">
+      <div class="card-head">
+        <div>
+          <div class="card-title">The cross-check: your top five on YouTube</div>
+          <div class="card-sub">Instagram is the main evidence above; this is the second opinion. On YouTube — where the audience arrives by searching rather than scrolling — the ranking inverts, and concrete how-to wins outright. Same person, same topics, two different jobs. Hover or tap a panel.</div>
+        </div>
+      </div>
+      <div class="agal" id="gal" role="list" aria-label="Top five YouTube Shorts by views"></div>
+      <div class="agal-note">Hover to expand · <kbd>←</kbd> <kbd>→</kbd> to move · <kbd>Enter</kbd> opens the video on YouTube</div>
+    </div>
+    <div class="card" style="margin-top:14px;">
+      <div class="card-head">
+        <div>
+          <div class="card-title">Content mix — now vs proposed</div>
+          <div class="card-sub">The "now" row is now <em>measured</em> from the 108-post sample rather than estimated. The proposed mix shifts weight toward live-market content without gutting the psychology posts, which earn your highest likes.</div>
+        </div>
+        <button class="toolbtn" id="mixToggle">Replay animation</button>
+      </div>
+      <div class="legend" id="mixLegend"></div>
+      <div id="mixChart" style="margin-top:6px;"></div>
+    </div>
+  </section>
+
+  <!-- ============ WHAT WORKS ============ -->
+  <section id="working">
+    <div class="sec-head">
+      <span class="num">04</span>
+      <h2>What's already working</h2>
+      <p>An audit that only finds faults isn't an audit, it's a sales pitch. These are real assets and I'd protect them.
+    </div>
+    <div class="checks">
+      <div class="check"><span class="bx">◆</span><span><b>You have real differentiation</b>You're one of very few women running a serious, non-tip-based trading education brand in India, and you've barely touched the angle. It's the one thing on this page a competitor cannot copy by working harder.</span></div>
+      <div class="check"><span class="bx">◆</span><span><b>Commodities is a genuine, measured edge</b>Posts naming gold, silver or commodities run a median 34,689 plays against 28,852 for everything else. It's a modest lift on a ten-post sample rather than a landslide — but it points the same way as your two biggest posts of the year, and almost nobody else in Indian finance content is there.</span></div>
+      <div class="check"><span class="bx">◆</span><span><b>"Not SEBI-registered" is in your bio</b>In the current regulatory climate that's exactly the right instinct. I'd defend it, not quietly drop it as the brand grows.</span></div>
+      <div class="check"><span class="bx">◆</span><span><b>Your production quality is solid</b>Clean framing, good lighting, confident delivery. And the data says length doesn't matter, format is already right, and posting day barely moves the needle — so the craft genuinely isn't the constraint. Packaging and topic selection are, and those are the cheapest things in the world to change.</span></div>
+      <div class="check"><span class="bx">◆</span><span><b>You can clearly ship</b>108 posts in six months, no gaps, at up to 33 a month. Consistency is the hardest habit to install and you plainly have it. Finding 02 argues for pointing that capacity somewhere else — but the capacity itself is the asset, and it's why I think this account can move quickly.</span></div>
+    </div>
+  </section>
+
+  <!-- ============ PLAN ============ -->
+  <section id="plan">
+    <div class="sec-head">
+      <span class="num">05</span>
+      <h2>A 30-day content plan I'd run</h2>
+      <p><strong>Three reels a week, not seven.</strong> That is the deliberate consequence of finding 02 — your median post lost a third of its reach when volume tripled, so the plan buys that reach back by publishing less and aiming better. Twelve posts, every hook real, weighted toward the live-market content the data actually rewards.</p>
+    </div>
+
+    <div class="card" style="margin-bottom:14px;">
+      <div class="card-title" style="margin-bottom:4px;">Four pillars</div><div class="card-sub" style="margin-bottom:14px;">Weights set by what the 108 posts actually did, not by what a content plan usually looks like.</div>
+      <div class="tblwrap">
+        <table>
+          <thead><tr><th>Pillar</th><th>Share</th><th>Job</th><th>Why</th></tr></thead>
+          <tbody>
+            <tr><td><span class="dot" style="background:var(--s1)"></span><strong>Live Market Desk</strong></td><td class="num">40%</td><td>Distribution</td><td>Named instrument, dated read, live position. Median 38K — your best group, and your 416K post</td></tr>
+            <tr><td><span class="dot" style="background:var(--s2)"></span><strong>The Trader's Mind</strong></td><td class="num">30%</td><td>Retention</td><td>Median 30K and your <em>highest</em> likes. Currently 52% of output — halved, not cut</td></tr>
+            <tr><td><span class="dot" style="background:var(--s3)"></span><strong>Anchored Mechanics</strong></td><td class="num">20%</td><td>Saves</td><td>The same teaching, but hung on a real instrument. Generic versions run 22K — your weakest group</td></tr>
+            <tr><td><span class="dot" style="background:var(--s4)"></span><strong>Story-led Product</strong></td><td class="num">10%</td><td>Revenue</td><td>Story framing does 55–103K; announcements do 10–16K. Also where the woman-in-markets angle lives</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="tabs" id="weekTabs"></div>
+    <div class="filters" id="pillarFilters"><span class="fl">Show pillars:</span></div>
+    <div class="weekmeta" id="weekMeta"></div>
+    <div class="tblwrap"><table><thead><tr><th style="width:70px">Day</th><th style="width:190px">Pillar</th><th>Working hook</th></tr></thead><tbody id="planBody"></tbody></table></div>
+  </section>
+
+  <!-- ============ MEASURE ============ -->
+  <section id="measure">
+    <div class="sec-head">
+      <span class="num">06</span>
+      <h2>How I'd measure it</h2>
+      <p>Vanity metrics won't tell you whether any of this worked. I'd report these four weekly. Two of them need a Creator account to read — noted below, since the account is on personal while it's private.
+    </div>
+    <div class="tiles">
+      <div class="tile"><div class="k">Metric 01 · needs Creator</div><div class="v" style="font-size:17.5px; letter-spacing:-.01em; line-height:1.25;">Non-follower reach %</div><div class="d">The only true measure of whether discovery is working.</div></div>
+      <div class="tile"><div class="k">Metric 02 · needs Creator</div><div class="v" style="font-size:17.5px; letter-spacing:-.01em; line-height:1.25;">Saves + shares per reel</div><div class="d">Instagram's actual ranking currency — likes are the weakest of the three.</div></div>
+      <div class="tile"><div class="k">Metric 03</div><div class="v" style="font-size:17.5px; letter-spacing:-.01em; line-height:1.25;">Lead-magnet opt-ins</div><div class="d">The first honest read on what 524,752 followers are actually worth.</div></div>
+      <div class="tile"><div class="k">Metric 04</div><div class="v" style="font-size:17.5px; letter-spacing:-.01em; line-height:1.25;">Median plays, not average</div><div class="d">Your 416K post drags the mean to 36K while the median sits at 29K.</div></div>
+    </div>
+
+    <div class="card" style="margin-top:14px;">
+      <div class="card-title" style="margin-bottom:4px;">Month-one targets</div>
+      <div class="card-sub" style="margin-bottom:18px;">Deliberately modest and checkable. A target you can't fail is a target you can't learn from.</div>
+      <div class="bars" id="targetChart"></div>
+    </div>
+
+    <div class="card" style="margin-top:14px;">
+      <div class="card-title" style="margin-bottom:4px;">What I still couldn't see</div>
+      <div class="card-sub" style="margin-bottom:16px;">I can now measure likes, comments, plays, formats, timing and topics. These are the things that stay dark until the account type changes.</div>
+      <div class="checks">
+        <div class="check"><span class="bx">☐</span><span><b>Follower demographics</b>Age, gender split, city. The whole plan shifts if your audience is 80% male 18–24 versus a broader mix — and right now nobody knows which it is.</span></div>
+        <div class="check"><span class="bx">☐</span><span><b>Saves and shares</b>The two signals Instagram actually ranks on. I can see likes; likes are the weakest of the three.</span></div>
+        <div class="check"><span class="bx">☐</span><span><b>How much of your reach is followers vs. discovery</b>The 5.5% figure is plays against follower count. Whether those plays are mostly your followers or mostly Explore is the single most useful thing Insights would tell you.</span></div>
+        <div class="check"><span class="bx">☐</span><span><b>Profile visits and link clicks per reel</b>Which posts actually send people to the bio — the step immediately before a sale.</span></div>
+        <div class="check"><span class="bx">☐</span><span><b>Real conversion on the ₹2,100 book</b>And exactly where in the funnel people drop out.</span></div>
+        <div class="check"><span class="bx">☐</span><span><b>What people ask for most in your DMs</b>That's free content research, sitting unread.</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ CORRECTIONS ============ -->
+  <section>
+    <div class="sec-head">
+      <span class="num">07</span>
+      <h2>Three things the data made me take back</h2>
+      <p>The first version of this audit was written before I could see your posts. Two of its conclusions didn't survive contact with the numbers, and I'd rather show you that than quietly delete them.</p>
+    </div>
+    <div class="checks">
+      <div class="check"><span class="bx">✕</span><span><b>"Your engagement rate is 0.6%"</b>That was a third-party estimate and it's roughly four times too generous. Measured on your median post, it's <strong>0.14%</strong>. Estimator tools flatter large accounts.</span></div>
+      <div class="check"><span class="bx">✕</span><span><b>"Concrete how-to content is what breaks out for you"</b>True on YouTube, where people search. On Instagram it's your <em>weakest</em> group — generic teaching runs a median of 22,072 with a ceiling of 44,700. What travels here is a named instrument and a dated call.</span></div>
+      <div class="check"><span class="bx">✕</span><span><b>"Cut the mindset content back hard"</b>Wrong. Psychology posts run a median of 30,192 plays and earn your <em>highest</em> median likes. They're currently 52% of output, which is too much — but they're doing a real job. Halve them, don't gut them.</span></div>
+    </div>
+  </section>
+
+  <!-- ============ ONE LINER ============ -->
+  <section>
+    <div class="sec-head"><span class="num">08</span><h2>The short version</h2></div>
+    <div class="kicker">
+      <p>You have 524,752 followers, a live-market instinct that produced a 416,000-play post, and — right now — no way to see any of it working.</p>
+      <p>Post three times a week instead of seven — tripling your output cost you a third of your reach per post, and bought only 50% more total. Point most of that output at live markets, where your numbers are measurably best. Stop announcing the book and start telling its story; that gap alone is worth about 10×. None of this is a rebuild — it's a change of aim, and the data says which way to aim. That's the job I'd like to do.</p>
+    </div>
+  </section>
+
+  <footer>
+    <strong style="color:var(--ink-2)">Sources</strong>
+    <div class="srcs">
+      <a href="https://www.instagram.com/theshadesoftrades/">Instagram — 108 posts, Feb–Aug 2026</a>
+      <a href="https://www.youtube.com/@theshadesoftrades">YouTube — Videos &amp; Shorts, sorted by Popular</a>
+      <a href="https://www.threads.com/@theshadesoftrades">Threads</a>
+      <a href="https://x.com/shadesoftrades_">X</a>
+      <a href="https://www.theshadesoftrades.com/">theshadesoftrades.com</a>
+      <a href="https://ikaroa.com/amplify/theshadesoftrades">Ikaroa Amplify (engagement estimate)</a>
+    </div>
+    Instagram figures are measured across 108 posts published between 7 February and 17 August 2026 — likes, comments, play counts, formats and timestamps, read from the profile while logged in as a follower. No private data, no Insights access, no third-party estimates except where explicitly labelled as such. Subject splits use a keyword classifier and are directional. Nothing here is investment advice.
+    <br><br>Samyukth Bitra · <a href="mailto:samyukthbitra@gmail.com">samyukthbitra@gmail.com</a> · 18 August 2026
+  </footer>
+</div>
+
+<script>
+(function(){
+  "use strict";
+  var tip = document.getElementById('tip');
+  function showTip(e, html){
+    tip.innerHTML = html; tip.style.opacity = 1;
+    var x = e.clientX + 14, y = e.clientY + 16;
+    var r = tip.getBoundingClientRect();
+    if (x + r.width > window.innerWidth - 10) x = e.clientX - r.width - 14;
+    if (y + r.height > window.innerHeight - 10) y = e.clientY - r.height - 14;
+    tip.style.left = x + 'px'; tip.style.top = y + 'px';
+  }
+  function hideTip(){ tip.style.opacity = 0; }
+
+  /* ---------- theme ---------- */
+  var root = document.documentElement;
+  document.getElementById('themeBtn').addEventListener('click', function(){
+    root.setAttribute('data-theme', root.getAttribute('data-theme') === 'dark' ? 'light' : 'dark');
+  });
+  /* dark is the default: the scan field is part of the design. The toggle still switches. */
+
+
+  /* ================= Scanner — vanilla WebGL2 port of React Bits <Scanner /> =================
+     Same GLSL as the published component, verbatim. ogl's Renderer/Program/Mesh/Triangle are
+     replaced with ~70 lines of raw WebGL2 doing exactly what they do here: one fullscreen
+     triangle, one program, per-frame uniforms. No dependencies, no build step.
+  ========================================================================================= */
+  (function(){
+    var container = document.getElementById('scanner');
+    if (!container) return;
+
+    var OPTS = {
+      color1:'#0d366b', color2:'#2a78d6', color3:'#ffffff',
+      speed:0.4, sweepSpeed:0.16, sweepWidth:2.2, sweepFalloff:4.5,
+      scale:2.1, frequency:1.7, ripple:0.28, bandDensity:8, lineSharpness:4.2, glow:0.26,
+      scanDirection:'diagonal', colorSpread:0.14, brightness:1.15, contrast:1.1,
+      softness:1.6, vignette:0.30, scanline:false, grain:true, grainIntensity:0.03,
+      opacity:1.0, mouseInteraction:true, mouseRadius:0.55, mouseStrength:0.6
+    };
+
+    function hexToRgb(hex){
+      var m = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+      if (!m) return [1,1,1];
+      return [parseInt(m[1],16)/255, parseInt(m[2],16)/255, parseInt(m[3],16)/255];
+    }
+    function dirToFloat(d){ return d === 'horizontal' ? 1.0 : d === 'diagonal' ? 2.0 : 0.0; }
+
+    var VERT = '#version 300 es\nin vec2 position;\nvoid main(){ gl_Position = vec4(position, 0.0, 1.0); }\n';
+
+    var FRAG = [
+'#version 300 es',
+'precision highp float;',
+'uniform vec2 iResolution; uniform float iTime;',
+'uniform float uSpeed, uSweepSpeed, uSweepWidth, uSweepFalloff, uScale, uFrequency, uRipple;',
+'uniform float uBandDensity, uLineSharpness, uGlow, uColorSpread, uBrightness, uContrast;',
+'uniform float uSoftness, uVignette, uOpacity, uScanline, uGrain, uGrainIntensity, uDirection;',
+'uniform float uScroll;',
+'uniform vec2 uMouse;',
+'uniform float uMouseEnabled, uMouseRadius, uMouseStrength, uMouseActive;',
+'uniform vec3 uColor1, uColor2, uColor3;',
+'out vec4 fragColor;',
+'const float TAU = 6.2831853;',
+'float signalField(vec2 p, float t){',
+'  float w = sin(p.x * 1.3 + t * 0.7);',
+'  w += sin(p.y * 1.7 - t * 0.52) * 0.8;',
+'  w += sin((p.x + p.y) * 0.9 + t * 0.91) * 0.6;',
+'  w += sin((p.x - p.y) * 1.53 - t * 0.63) * 0.42;',
+'  return w * 0.35;',
+'}',
+'vec3 palette(float f){',
+'  f = clamp(f, 0.0, 1.0);',
+'  f = pow(f, uContrast);',
+'  vec3 c = mix(uColor1, uColor2, smoothstep(0.08, 0.6, f));',
+'  return mix(c, uColor3, smoothstep(0.68, 1.0, f));',
+'}',
+'float scanBand(float x, float aa, float sharp){',
+'  float v = mix(0.5, 0.5 + 0.5 * cos(x * TAU), aa);',
+'  return pow(v, sharp);',
+'}',
+'void main(){',
+'  float aspect = iResolution.x / iResolution.y;',
+'  vec2 uv0 = (gl_FragCoord.xy * 2.0 - iResolution.xy) / iResolution.y;',
+'  vec2 p = (uv0 + vec2(0.0, uScroll)) / max(uScale, 0.001);',
+'  float t = iTime * uSpeed;',
+'  float mouseBoost = 0.0;',
+'  if (uMouseEnabled > 0.5) {',
+'    vec2 mUv = vec2((uMouse.x * 2.0 - 1.0) * aspect, uMouse.y * 2.0 - 1.0);',
+'    vec2 md = uv0 - mUv;',
+'    float r = max(uMouseRadius, 0.001);',
+'    mouseBoost = exp(-dot(md, md) / (r * r)) * uMouseStrength * uMouseActive;',
+'  }',
+'  float axis;',
+'  if (uDirection < 0.5) axis = p.y;',
+'  else if (uDirection < 1.5) axis = p.x;',
+'  else axis = (p.x + p.y) * 0.70710678;',
+'  float sig = signalField(p * uFrequency, t);',
+'  float coord = axis + sig * uRipple;',
+'  float phase = coord / max(uSweepWidth, 0.05) - t * uSweepSpeed;',
+'  float sweep = pow(0.5 + 0.5 * cos(phase * TAU), max(uSweepFalloff, 0.1));',
+'  float lc = coord * uBandDensity;',
+'  float aa = 1.0 / (1.0 + uSoftness * fwidth(lc) * 3.0);',
+'  aa = clamp(aa * (1.0 + mouseBoost * 0.6), 0.0, 1.0);',
+'  float bodyBase = clamp(0.5 + 0.5 * sig, 0.0, 1.0);',
+'  float body = bodyBase * bodyBase * uGlow * sweep;',
+'  float sharp = max(uLineSharpness, 0.1);',
+'  float split = uColorSpread * 0.16;',
+'  float fr = clamp(scanBand(lc + split, aa, sharp) * sweep + body, 0.0, 1.0);',
+'  float fg = clamp(scanBand(lc, aa, sharp) * sweep + body, 0.0, 1.0);',
+'  float fb = clamp(scanBand(lc - split, aa, sharp) * sweep + body, 0.0, 1.0);',
+'  vec3 col = vec3(palette(fr).r, palette(fg).g, palette(fb).b);',
+'  float inten = (fr + fg + fb) * 0.3333333 * uBrightness;',
+'  inten *= 1.0 + mouseBoost * 0.9;',
+'  if (uScanline > 0.5) { inten *= 1.0 - 0.18 * (0.5 + 0.5 * cos(gl_FragCoord.y * 1.7)); }',
+'  if (uGrain > 0.5) {',
+'    float g = fract(sin(dot(gl_FragCoord.xy, vec2(12.9898, 78.233)) + iTime) * 43758.5453);',
+'    inten += (g - 0.5) * uGrainIntensity;',
+'  }',
+'  inten *= clamp(1.0 - uVignette * smoothstep(0.55, 1.65, length(uv0)), 0.0, 1.0);',
+'  inten = clamp(inten, 0.0, 1.0);',
+'  float a = clamp(inten * uOpacity, 0.0, 1.0);',
+'  fragColor = vec4(clamp(col, 0.0, 1.0) * a, a);',
+'}'
+].join('\n');
+
+    var canvas = document.createElement('canvas');
+    var gl = canvas.getContext('webgl2', { alpha:true, premultipliedAlpha:true, antialias:false });
+    if (!gl) return;   // no WebGL2 → the dark band alone still reads fine
+    container.appendChild(canvas);
+
+    function compile(type, src){
+      var sh = gl.createShader(type);
+      gl.shaderSource(sh, src); gl.compileShader(sh);
+      if (!gl.getShaderParameter(sh, gl.COMPILE_STATUS)) {
+        console.warn('Scanner shader:', gl.getShaderInfoLog(sh)); return null;
+      }
+      return sh;
+    }
+    var vs = compile(gl.VERTEX_SHADER, VERT), fs = compile(gl.FRAGMENT_SHADER, FRAG);
+    if (!vs || !fs) { container.removeChild(canvas); return; }
+    var prog = gl.createProgram();
+    gl.attachShader(prog, vs); gl.attachShader(prog, fs); gl.linkProgram(prog);
+    if (!gl.getProgramParameter(prog, gl.LINK_STATUS)) { container.removeChild(canvas); return; }
+    gl.useProgram(prog);
+
+    // one fullscreen triangle — the same geometry ogl's Triangle() builds
+    var vao = gl.createVertexArray();
+    gl.bindVertexArray(vao);
+    var buf = gl.createBuffer();
+    gl.bindBuffer(gl.ARRAY_BUFFER, buf);
+    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1,-1, 3,-1, -1,3]), gl.STATIC_DRAW);
+    var loc = gl.getAttribLocation(prog, 'position');
+    gl.enableVertexAttribArray(loc);
+    gl.vertexAttribPointer(loc, 2, gl.FLOAT, false, 0, 0);
+
+    var U = {};
+    ['iResolution','iTime','uSpeed','uSweepSpeed','uSweepWidth','uSweepFalloff','uScale','uFrequency',
+     'uRipple','uBandDensity','uLineSharpness','uGlow','uColorSpread','uBrightness','uContrast',
+     'uSoftness','uVignette','uOpacity','uScanline','uGrain','uGrainIntensity','uDirection','uScroll',
+     'uMouse','uMouseEnabled','uMouseRadius','uMouseStrength','uMouseActive',
+     'uColor1','uColor2','uColor3'].forEach(function(n){ U[n] = gl.getUniformLocation(prog, n); });
+
+    function applyOpts(){
+      gl.uniform1f(U.uSpeed, OPTS.speed);
+      gl.uniform1f(U.uSweepSpeed, OPTS.sweepSpeed);
+      gl.uniform1f(U.uSweepWidth, OPTS.sweepWidth);
+      gl.uniform1f(U.uSweepFalloff, OPTS.sweepFalloff);
+      gl.uniform1f(U.uScale, OPTS.scale);
+      gl.uniform1f(U.uFrequency, OPTS.frequency);
+      gl.uniform1f(U.uRipple, OPTS.ripple);
+      gl.uniform1f(U.uBandDensity, OPTS.bandDensity);
+      gl.uniform1f(U.uLineSharpness, OPTS.lineSharpness);
+      gl.uniform1f(U.uGlow, OPTS.glow);
+      gl.uniform1f(U.uColorSpread, OPTS.colorSpread);
+      gl.uniform1f(U.uBrightness, OPTS.brightness);
+      gl.uniform1f(U.uContrast, OPTS.contrast);
+      gl.uniform1f(U.uSoftness, OPTS.softness);
+      gl.uniform1f(U.uVignette, OPTS.vignette);
+      gl.uniform1f(U.uOpacity, OPTS.opacity);
+      gl.uniform1f(U.uScanline, OPTS.scanline ? 1 : 0);
+      gl.uniform1f(U.uGrain, OPTS.grain ? 1 : 0);
+      gl.uniform1f(U.uGrainIntensity, OPTS.grainIntensity);
+      gl.uniform1f(U.uDirection, dirToFloat(OPTS.scanDirection));
+      gl.uniform1f(U.uMouseEnabled, OPTS.mouseInteraction ? 1 : 0);
+      gl.uniform1f(U.uMouseRadius, OPTS.mouseRadius);
+      gl.uniform1f(U.uMouseStrength, OPTS.mouseStrength);
+      gl.uniform3fv(U.uColor1, hexToRgb(OPTS.color1));
+      gl.uniform3fv(U.uColor2, hexToRgb(OPTS.color2));
+      gl.uniform3fv(U.uColor3, hexToRgb(OPTS.color3));
+    }
+    applyOpts();
+
+    gl.clearColor(0,0,0,0);
+    gl.enable(gl.BLEND);
+    gl.blendFunc(gl.ONE, gl.ONE_MINUS_SRC_ALPHA);   // premultiplied alpha
+
+    function draw(){
+      gl.viewport(0, 0, canvas.width, canvas.height);
+      gl.clear(gl.COLOR_BUFFER_BIT);
+      gl.drawArrays(gl.TRIANGLES, 0, 3);
+    }
+    function setSize(){
+      var r = container.getBoundingClientRect();
+      var dpr = Math.min(window.devicePixelRatio || 1, 2);
+      canvas.width  = Math.max(1, Math.floor(r.width  * dpr));
+      canvas.height = Math.max(1, Math.floor(r.height * dpr));
+      gl.uniform2f(U.iResolution, canvas.width, canvas.height);
+      draw();
+    }
+    var ro = new ResizeObserver(setSize); ro.observe(container); setSize();
+
+    /* pointer focus */
+    var cur = [0.5, 0.5], tgt = [0.5, 0.5], act = 0, tgtAct = 0;
+    window.addEventListener('mousemove', function(e){
+      tgt = [e.clientX / window.innerWidth, 1 - e.clientY / window.innerHeight];
+      tgtAct = 1;
+    }, { passive:true });
+    document.addEventListener('mouseleave', function(){ tgtAct = 0; });
+
+    /* the field pans with the page — one fixed canvas, no tiling, no seams */
+    var scrollU = 0, scrollTarget = 0;
+    function readScroll(){
+      scrollTarget = -(window.scrollY / Math.max(window.innerHeight, 1)) * 2.0;
+    }
+    readScroll();
+    scrollU = scrollTarget;
+    window.addEventListener('scroll', readScroll, { passive:true });
+    window.addEventListener('resize', readScroll);
+
+    /* reduced motion → one static frame, no loop */
+    var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (reduce) {
+      gl.uniform1f(U.iTime, 12.0);
+      var paint = function(){ gl.uniform1f(U.uScroll, scrollTarget); draw(); };
+      paint();
+      window.addEventListener('scroll', paint, { passive:true });
+      return;
+    }
+
+    var raf = 0, onScreen = true, pageOn = !document.hidden, t0 = performance.now();
+    function loop(t){
+      gl.uniform1f(U.iTime, (t - t0) * 0.001);
+      cur[0] += 0.05 * (tgt[0] - cur[0]);
+      cur[1] += 0.05 * (tgt[1] - cur[1]);
+      gl.uniform2f(U.uMouse, cur[0], cur[1]);
+      act += 0.05 * (tgtAct - act);
+      gl.uniform1f(U.uMouseActive, act);
+      scrollU += 0.12 * (scrollTarget - scrollU);
+      gl.uniform1f(U.uScroll, scrollU);
+      draw();
+      raf = requestAnimationFrame(loop);
+    }
+    function start(){ if (onScreen && pageOn && !raf) raf = requestAnimationFrame(loop); }
+    function stop(){ if (raf) { cancelAnimationFrame(raf); raf = 0; } }
+    new IntersectionObserver(function(e){ onScreen = e[0].isIntersecting; onScreen ? start() : stop(); },
+      { threshold:0 }).observe(container);
+    document.addEventListener('visibilitychange', function(){
+      pageOn = !document.hidden; pageOn ? start() : stop();
+    });
+    start();
+  })();
+
+  /* ---------- generic bar chart ---------- */
+  function fmt(n){ return n >= 1000 ? (n/1000).toFixed(n % 1000 === 0 ? 0 : 1) + 'K' : String(n); }
+
+  function drawBars(el, rows, max, opts){
+    opts = opts || {};
+    el.innerHTML = '';
+    rows.forEach(function(r, i){
+      var row = document.createElement('div'); row.className = 'brow';
+      var lab = document.createElement('div'); lab.className = 'blab';
+      lab.textContent = r.label; lab.title = r.label;
+      var track = document.createElement('div'); track.className = 'btrack';
+      var fill = document.createElement('div'); fill.className = 'bfill';
+      fill.style.background = r.color; fill.style.width = '0%';
+      var val = document.createElement('div'); val.className = 'bval';
+      val.textContent = r.display || fmt(r.value);
+      track.appendChild(fill); track.appendChild(val);
+      row.appendChild(lab); row.appendChild(track);
+      row.addEventListener('mousemove', function(e){
+        showTip(e, '<b>' + r.label + '</b>' + (r.tip || (r.display || fmt(r.value))));
+      });
+      row.addEventListener('mouseleave', hideTip);
+      el.appendChild(row);
+      setTimeout(function(){ fill.style.width = Math.max(0.4, (r.value / max) * 100) + '%'; }, 60 + i * 35);
+    });
+  }
+
+  function tableFrom(rows, cols){
+    var h = '<div class="tblwrap"><table><thead><tr>';
+    cols.forEach(function(c){ h += '<th>' + c + '</th>'; });
+    h += '</tr></thead><tbody>';
+    rows.forEach(function(r){
+      h += '<tr><td>' + r.label + '</td><td class="num">' + (r.display || fmt(r.value)) + '</td><td>' + (r.group || '—') + '</td></tr>';
+    });
+    return h + '</tbody></table></div>';
+  }
+
+  /* ---------- funnel ---------- */
+  var funnel = [
+    { label:'Instagram followers', value:524000, color:'var(--seq-700)', tip:'524,000 · the whole asset' },
+    { label:'Threads followers',   value:57000,  color:'var(--seq-550)', tip:'57,000 · 10.9% of Instagram' },
+    { label:'YouTube subscribers', value:5010,   color:'var(--seq-450)', tip:'5,010 · 0.96% of Instagram' },
+    { label:'X followers',         value:3584,   color:'var(--seq-300)', tip:'3,584 · 0.68% of Instagram, dormant since Jan' },
+    { label:'Owned email list',    value:0,      color:'var(--critical)', display:'0', tip:'No email capture exists anywhere in the funnel' }
+  ];
+  funnel.forEach(function(r){ r.group = r.value ? ((r.value/524000)*100).toFixed(1) + '% of IG' : 'none'; });
+  drawBars(document.getElementById('funnelChart'), funnel, 524000);
+  document.getElementById('funnelTable').innerHTML = tableFrom(funnel, ['Channel','Size','Share of Instagram']);
+
+  /* ---------- monthly volume vs median plays ---------- */
+  var MONTHS = [
+    { m:'Feb', posts:8,  med:41967, likes:1001, total:'357K' },
+    { m:'Mar', posts:6,  med:32377, likes:990,  total:'230K' },
+    { m:'Apr', posts:12, med:36023, likes:846,  total:'891K' },
+    { m:'May', posts:12, med:32341, likes:876,  total:'449K' },
+    { m:'Jun', posts:26, med:22916, likes:525,  total:'694K' },
+    { m:'Jul', posts:33, med:28031, likes:653,  total:'688K' },
+    { m:'Aug*',posts:11, med:21894, likes:576,  total:'223K' }
+  ];
+  drawBars(document.getElementById('volChart'), MONTHS.map(function(x){
+    return { label:x.m, value:x.posts, display:String(x.posts), color:'var(--s1)',
+             tip:x.posts + ' posts published' };
+  }), 33);
+  drawBars(document.getElementById('medChart'), MONTHS.map(function(x){
+    return { label:x.m, value:x.med, color:'var(--s2)',
+             tip:fmt(x.med) + ' median plays · ' + x.likes + ' median likes' };
+  }), 42000);
+  document.getElementById('monthTable').innerHTML =
+    '<div class="tblwrap"><table><thead><tr><th>Month</th><th>Posts</th><th>Median plays</th><th>Median likes</th><th>Total plays</th></tr></thead><tbody>' +
+    MONTHS.map(function(x){ return '<tr><td>' + x.m + '</td><td class="num">' + x.posts + '</td><td class="num">' +
+      x.med.toLocaleString() + '</td><td class="num">' + x.likes + '</td><td class="num">' + x.total + '</td></tr>'; }).join('') +
+    '</tbody></table></div><div class="agal-note">* August measured to the 17th.</div>';
+
+  /* ---------- distribution ---------- */
+  var DIST = [
+    { label:'Weakest reel',      value:9805,   color:'var(--seq-300)', tip:'9,805 plays — a book announcement post' },
+    { label:'Lower quartile',    value:20591,  color:'var(--seq-450)', tip:'25% of your reels do less than this' },
+    { label:'Median reel',       value:28996,  color:'var(--seq-550)', tip:'28,996 plays — 5.5% of your follower count' },
+    { label:'Upper quartile',    value:40236,  color:'var(--seq-700)', tip:'25% of your reels beat this' },
+    { label:'Best reel ever',    value:416230, color:'var(--s2)',      tip:'416,230 plays — the dated market call, 2 April' }
+  ];
+  drawBars(document.getElementById('distChart'), DIST, 416230);
+  document.getElementById('distTable').innerHTML = tableFrom(DIST.map(function(d){
+    return { label:d.label, value:d.value, group:(d.value/524752*100).toFixed(1) + '% of followers' };
+  }), ['Point','Plays','vs follower count']);
+
+  /* ---------- topic medians ---------- */
+  var TOPICS = [
+    { label:'Live market / named instrument', value:37992, color:'var(--s1)', tip:'n=15 · median 37,992 plays · best post 416K' },
+    { label:'Trading psychology',             value:30192, color:'var(--s2)', tip:'n=50 · median 30,192 plays · highest median likes (876)' },
+    { label:'Product / promo',                value:22916, color:'var(--s3)', tip:'n=11 · median 22,916 plays · huge spread by framing' },
+    { label:'Generic teaching',               value:22072, color:'var(--s4)', tip:'n=21 · median 22,072 plays · lowest ceiling of the four (44.7K)' }
+  ];
+  drawBars(document.getElementById('topicChart'), TOPICS, 38000);
+
+  /* ---------- targets ---------- */
+  var targets = [
+    
+    { label:'Median reel plays',   value:70,  color:'var(--s1)', display:'22K → 35K', tip:'Back to the February–May baseline, on a third of the output' },
+    { label:'Posts per week',      value:30,  color:'var(--s2)', display:'7.6 → 3', tip:'Deliberately down. Fewer, better, further apart.' },
+    { label:'Email / WhatsApp opt-ins', value:45, color:'var(--s3)', display:'500', tip:'From zero. The first asset you would actually own.' }
+  ];
+  drawBars(document.getElementById('targetChart'), targets, 100);
+
+  /* ---------- table toggles ---------- */
+  Array.prototype.forEach.call(document.querySelectorAll('[data-table]'), function(btn){
+    btn.addEventListener('click', function(){
+      var t = document.getElementById(btn.getAttribute('data-table'));
+      var open = !t.hidden;
+      t.hidden = open;
+      btn.textContent = open ? 'View as table' : 'Hide table';
+    });
+  });
+
+  /* ---------- content mix ---------- */
+  var PILLARS = [
+    { key:'lm',   name:'Live Market Desk',   color:'var(--s1)' },
+    { key:'mind', name:"The Trader's Mind",  color:'var(--s2)' },
+    { key:'mech', name:'Anchored Mechanics', color:'var(--s3)' },
+    { key:'prod', name:'Story-led Product',  color:'var(--s4)' }
+  ];
+  var MIX = {
+    now:      { label:'Current mix', note:'measured across 97 reels, Feb–Aug 2026', v:[15, 52, 22, 11] },
+    proposed: { label:'Proposed mix', note:'more live market, less generic teaching', v:[40, 30, 20, 10] }
+  };
+  document.getElementById('mixLegend').innerHTML = PILLARS.map(function(p){
+    return '<span><i style="background:' + p.color + '"></i>' + p.name + '</span>';
+  }).join('');
+
+  var LABEL_INK = { 0:'#fff', 1:'#fff', 2:'#fff', 3:'#0b0b0b' };
+  function drawMix(animate){
+    var el = document.getElementById('mixChart');
+    el.innerHTML = ['now','proposed'].map(function(k){
+      var m = MIX[k];
+      var segs = m.v.map(function(v, i){
+        return '<div class="seg" style="flex-basis:' + (animate ? 0 : v) + '%; color:' + LABEL_INK[i] +
+               '; background:' + PILLARS[i].color + '" data-w="' + v + '" ' +
+               'data-t="' + PILLARS[i].name + '|' + v + '% of output">' + (v >= 5 ? v + '%' : '') + '</div>';
+      }).join('');
+      return '<div class="mixrow">' +
+             '<div class="mixlab">' + m.label + ' <em>' + m.note + '</em></div>' +
+             '<div class="stack">' + segs + '</div></div>';
+    }).join('');
+    var segs = el.querySelectorAll('.seg');
+    if (animate) setTimeout(function(){
+      Array.prototype.forEach.call(segs, function(s){ s.style.flexBasis = s.getAttribute('data-w') + '%'; });
+    }, 60);
+    Array.prototype.forEach.call(segs, function(s){
+      s.addEventListener('mousemove', function(e){
+        var p = s.getAttribute('data-t').split('|');
+        showTip(e, '<b>' + p[0] + '</b>' + p[1]);
+      });
+      s.addEventListener('mouseleave', hideTip);
+    });
+  }
+  drawMix(true);
+  document.getElementById('mixToggle').addEventListener('click', function(){ drawMix(true); });
+
+
+  /* ---------- accordion gallery (vanilla port of React Bits AccordionGallery) ---------- */
+  var GAL = [
+    { id:'USyfwTxzWVE', views:'42K',  label:'How to legally trade gold & silver in the Indian stock market?', kind:'Specific / how-to', note:'15× your median. Your best-ever post.' },
+    { id:'n8Z7sLDXqac', views:'12K',  label:'Timings for intraday trading',                                    kind:'Specific / how-to', note:'A question beginners search for by name.' },
+    { id:'qglD4-ra3t8', views:'4.4K', label:'Real trading freedom is confidence in your strategy',             kind:'Mindset',           note:'Your best-ever mindset post — and 10× behind the top one.' },
+    { id:'ge8zdjSQIGg', views:'3.8K', label:'How long does it take to become a profitable trader?',            kind:'Specific / how-to', note:'Answerable, searchable, honest.' },
+    { id:'nQZQmkGI2Is', views:'3.5K', label:'Easy trade execution hack',                                       kind:'Specific / how-to', note:'A mechanic, taught in under a minute.' }
+  ];
+  var EXPAND_RATIO = 0.52, DEFAULT_INDEX = 0;
+  (function(){
+    var gal = document.getElementById('gal');
+    if (!gal) return;
+    var n = GAL.length;
+    var openPct = EXPAND_RATIO * 100;
+    var restPct = (100 - openPct) / (n - 1);
+    var idx = DEFAULT_INDEX;
+
+    GAL.forEach(function(it, i){
+      var a = document.createElement('a');
+      a.className = 'apanel';
+      a.href = 'https://www.youtube.com/shorts/' + it.id;
+      a.target = '_blank'; a.rel = 'noopener';
+      a.setAttribute('role','listitem');
+      a.setAttribute('aria-label', it.label + ' — ' + it.views + ' views');
+      a.tabIndex = 0;
+      a.innerHTML =
+        '<img class="amedia" alt="" loading="lazy" src="https://i.ytimg.com/vi/' + it.id + '/oar2.jpg">' +
+        '<div class="ashade"></div>' +
+        '<span class="arank">#' + (i + 1) + '</span>' +
+        '<span class="alabel-v">' + it.views + ' views</span>' +
+        '<div class="acontent"><div class="alabel-h">' +
+          '<div class="av">' + it.views + '</div>' +
+          '<div class="at">' + it.label + '</div>' +
+          '<div class="am"><span class="atag' + (it.kind.indexOf('Specific') === 0 ? ' spec' : '') + '">' + it.kind + '</span>' + it.note + '</div>' +
+        '</div></div>';
+      var im = a.querySelector('.amedia');
+      im.addEventListener('error', function(){
+        if (!im.dataset.retried){ im.dataset.retried = '1'; im.src = 'https://i.ytimg.com/vi/' + it.id + '/hq720.jpg'; return; }
+        a.classList.add('noimg'); im.remove();
+      });
+      a.addEventListener('mouseenter', function(){ setIdx(i); });
+      a.addEventListener('focus', function(){ setIdx(i); });
+      a.addEventListener('keydown', function(e){
+        if (e.key === 'ArrowRight' || e.key === 'ArrowDown'){ e.preventDefault(); move(1); }
+        else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp'){ e.preventDefault(); move(-1); }
+      });
+      gal.appendChild(a);
+    });
+
+    function move(d){
+      var next = (idx + d + n) % n;
+      setIdx(next);
+      gal.children[next].focus();
+    }
+    function setIdx(i){
+      idx = i;
+      Array.prototype.forEach.call(gal.children, function(el, j){
+        var on = (j === i);
+        el.classList.toggle('on', on);
+        el.style.flexBasis = (on ? openPct : restPct) + '%';
+        el.setAttribute('aria-current', on ? 'true' : 'false');
+      });
+    }
+    setIdx(DEFAULT_INDEX);
+  })();
+
+  /* ---------- 30-day plan ---------- */
+  var WEEKS = [
+    { title:'Week 1', theme:'Re-instrument, then restart the desk',
+      note:'Output drops from seven posts a week to three, deliberately — that is the whole bet of week one. Fewer posts, each one aimed at a named market.',
+      days:[
+        ['Tue','lm','Gold into this week — the level I\u2019m watching and why.','the format that produced your 416K'],
+        ['Thu','mind','I stopped posting every day. Here\u2019s what it cost me.','honest, meta, and true'],
+        ['Sat','lm','Silver is doing something gold isn\u2019t. Here\u2019s the divergence.','']
+      ]},
+    { title:'Week 2', theme:'Make the desk a habit people return for',
+      note:'A running position people can follow beats a standalone lesson. Your 73.7K swing-trade post is the proof.',
+      days:[
+        ['Tue','lm','I\u2019m still in this gold trade. Day 14.','serialise it'],
+        ['Thu','mech','How I size a commodity position — on this trade, right now.','mechanics anchored to a live instrument'],
+        ['Sat','mind','Conviction isn\u2019t stubbornness. Here\u2019s where the line is.','']
+      ]},
+    { title:'Week 3', theme:'Make the dated call',
+      note:'Your single biggest post was a dated read published the day before the move. It is repeatable, and almost nobody in Indian finance content will put a date on it.',
+      days:[
+        ['Tue','lm','This week in gold: the two things that decide direction.','put a date on it'],
+        ['Thu','mind','The month I was wrong about gold — and held anyway.',''],
+        ['Sat','mech','Where I put a stop on a swing trade, using this chart.','']
+      ]},
+    { title:'Week 4', theme:'Sell by telling the story',
+      note:'Your announcement posts do ~10K. Your story-led product posts do 55–103K. Same book. This week only uses the second kind.',
+      days:[
+        ['Tue','lm','USDINR is the trade nobody in India is watching.','fresh angle, not the March repost'],
+        ['Thu','prod','The chapter I rewrote four times — and why.','the book, told as a story'],
+        ['Sat','mind','Six years in: what I\u2019d tell myself at the start.','']
+      ]}
+  ];
+  var curWeek = 0;
+  var active = { com:true, mech:true, mind:true, wom:true };
+  var pmap = {}; PILLARS.forEach(function(p){ pmap[p.key] = p; });
+
+  var tabsEl = document.getElementById('weekTabs');
+  WEEKS.forEach(function(w, i){
+    var b = document.createElement('button');
+    b.className = 'tab' + (i === 0 ? ' active' : '');
+    b.textContent = w.title;
+    b.addEventListener('click', function(){
+      curWeek = i;
+      Array.prototype.forEach.call(tabsEl.children, function(c, j){ c.classList.toggle('active', j === i); });
+      renderPlan();
+    });
+    tabsEl.appendChild(b);
+  });
+
+  var fEl = document.getElementById('pillarFilters');
+  PILLARS.forEach(function(p){
+    var b = document.createElement('button');
+    b.className = 'fchip';
+    b.innerHTML = '<i style="background:' + p.color + '"></i>' + p.name;
+    b.addEventListener('click', function(){
+      active[p.key] = !active[p.key];
+      b.classList.toggle('off', !active[p.key]);
+      renderPlan();
+    });
+    fEl.appendChild(b);
+  });
+
+  function renderPlan(){
+    var w = WEEKS[curWeek];
+    document.getElementById('weekMeta').innerHTML = '<strong style="color:var(--ink-1)">' + w.theme + '</strong> — ' + w.note;
+    var body = document.getElementById('planBody');
+    var rows = w.days.filter(function(d){ return active[d[1]]; });
+    if (!rows.length){
+      body.innerHTML = '<tr><td colspan="3" style="color:var(--ink-3)">No pillars selected.</td></tr>';
+      return;
+    }
+    body.innerHTML = rows.map(function(d){
+      var p = pmap[d[1]];
+      return '<tr><td style="color:var(--ink-3); font-weight:600">' + d[0] + '</td>' +
+             '<td><span class="pill" style="--pc:' + p.color + '"><i></i>' + p.name + '</span></td>' +
+             '<td><span class="hook">' + d[2] + '</span>' +
+             (d[3] ? ' <span style="color:var(--ink-3); font-size:12.5px">(' + d[3] + ')</span>' : '') + '</td></tr>';
+    }).join('');
+  }
+  renderPlan();
+
+  
+  /* ---------- findings: one open at a time ---------- */
+  (function(){
+    var items = Array.prototype.slice.call(document.querySelectorAll('#acc .item'));
+    items.forEach(function(item){
+      var head = item.querySelector('.ihead');
+      head.setAttribute('role','button');
+      head.setAttribute('tabindex','0');
+      head.setAttribute('aria-expanded', item.classList.contains('open') ? 'true' : 'false');
+      function toggle(){
+        var wasOpen = item.classList.contains('open');
+        items.forEach(function(other){
+          other.classList.remove('open');
+          other.querySelector('.ibody').style.maxHeight = '0px';
+          other.querySelector('.ihead').setAttribute('aria-expanded','false');
+        });
+        if (!wasOpen) {
+          item.classList.add('open');
+          head.setAttribute('aria-expanded','true');
+          sizeOpen();
+        }
+      }
+      head.addEventListener('click', toggle);
+      head.addEventListener('keydown', function(e){
+        if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); toggle(); }
+      });
+    });
+
+    // max-height is measured, never guessed — long findings never clip
+    function sizeOpen(){
+      var open = document.querySelector('#acc .item.open .ibody');
+      if (open) open.style.maxHeight = (open.scrollHeight + 40) + 'px';
+    }
+    window.addEventListener('resize', sizeOpen);
+    sizeOpen();
+  })();
+
+  /* ---------- pinned nav: scroll spy + progress ---------- */
+  (function(){
+    var bar   = document.querySelector('.topbar');
+    var links = Array.prototype.slice.call(document.querySelectorAll('.navlinks a'));
+    var prog  = document.getElementById('progress');
+    var targets = links.map(function(a){
+      return { link:a, el:document.querySelector(a.getAttribute('href')) };
+    }).filter(function(t){ return t.el; });
+    if (!targets.length) return;
+
+    var ticking = false;
+    function update(){
+      ticking = false;
+      var y = window.scrollY || 0;
+      bar.classList.toggle('stuck', y > 8);
+
+      if (prog) {
+        var max = Math.max(1, document.documentElement.scrollHeight - window.innerHeight);
+        prog.style.width = Math.min(100, (y / max) * 100) + '%';
+      }
+
+      // the section whose top has most recently passed the bar
+      var line = y + bar.offsetHeight + 90, current = targets[0];
+      targets.forEach(function(t){
+        if (t.el.offsetTop <= line) current = t;
+      });
+      links.forEach(function(a){ a.classList.remove('active'); });
+      current.link.classList.add('active');
+      current.link.setAttribute('aria-current','true');
+      links.forEach(function(a){ if (a !== current.link) a.removeAttribute('aria-current'); });
+    }
+    function onScroll(){ if (!ticking) { ticking = true; requestAnimationFrame(update); } }
+    window.addEventListener('scroll', onScroll, { passive:true });
+    window.addEventListener('resize', onScroll);
+    update();
+  })();
+})();
+</script>
+</body>
+</html>
