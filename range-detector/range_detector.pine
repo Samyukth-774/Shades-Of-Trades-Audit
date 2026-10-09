@@ -1,0 +1,137 @@
+//@version=5
+indicator("Mechanical Range Detector", shorttitle="MRD", overlay=true, max_boxes_count=200, max_lines_count=500, max_labels_count=200)
+
+// ── Inputs ────────────────────────────────────────────────────────────────
+grpPiv = "Pivots"
+pivLen   = input.int(5,    "Pivot length (bars each side)", minval=1, group=grpPiv)
+touches  = input.int(2,    "Pivots per side to form a range", minval=2, maxval=4, group=grpPiv)
+tolMult  = input.float(0.5, "Cluster tolerance (x ATR)", minval=0.05, step=0.05, group=grpPiv)
+
+grpRng = "Range filters"
+atrLen   = input.int(14,   "ATR length", minval=1, group=grpRng)
+minH     = input.float(1.0, "Min range height (x ATR)", minval=0.1, step=0.1, group=grpRng)
+maxH     = input.float(6.0, "Max range height (x ATR)", minval=0.5, step=0.5, group=grpRng)
+erLen    = input.int(30,   "Efficiency-ratio lookback", minval=5, group=grpRng)
+erMax    = input.float(0.35, "Max efficiency ratio (low = choppy)", minval=0.05, maxval=1.0, step=0.05, group=grpRng)
+brkBuf   = input.float(0.25, "Break buffer (x ATR, close beyond edge)", minval=0.0, step=0.05, group=grpRng)
+devPct   = input.float(10.0, "Deviation zone (% of range height)", minval=0.0, step=1.0, group=grpRng)
+
+grpVis = "Style"
+colRange = input.color(color.new(color.blue, 88), "Range fill", group=grpVis)
+colEdge  = input.color(color.blue, "Range border", group=grpVis)
+colUp    = input.color(color.teal, "Break up", group=grpVis)
+colDn    = input.color(color.red, "Break down", group=grpVis)
+showDev  = input.bool(true, "Show deviation zones", group=grpVis)
+showMid  = input.bool(true, "Show midpoint", group=grpVis)
+
+// ── Core series ───────────────────────────────────────────────────────────
+atr = ta.atr(atrLen)
+// Kaufman efficiency ratio: net move / total path. Low = ranging.
+path = math.sum(math.abs(close - close[1]), erLen)
+er = path > 0 ? math.abs(close - close[erLen]) / path : 1.0
+
+// Pivots are confirmed pivLen bars late (no repainting after confirmation).
+ph = ta.pivothigh(high, pivLen, pivLen)
+pl = ta.pivotlow(low, pivLen, pivLen)
+
+var float[] hiP = array.new_float()
+var int[]   hiB = array.new_int()
+var float[] loP = array.new_float()
+var int[]   loB = array.new_int()
+
+newPivot = false
+if not na(ph)
+    array.push(hiP, ph)
+    array.push(hiB, bar_index - pivLen)
+    newPivot := true
+    if array.size(hiP) > touches
+        array.shift(hiP)
+        array.shift(hiB)
+if not na(pl)
+    array.push(loP, pl)
+    array.push(loB, bar_index - pivLen)
+    newPivot := true
+    if array.size(loP) > touches
+        array.shift(loP)
+        array.shift(loB)
+
+// ── Range state ───────────────────────────────────────────────────────────
+var bool   active = false
+var float  rTop = na
+var float  rBot = na
+var box    rBox = na
+var line   rMid = na
+var line   rDevT = na
+var line   rDevB = na
+
+newRange = false
+brkUp = false
+brkDn = false
+
+// 1) Try to open a range on each new confirmed pivot.
+if not active and newPivot and array.size(hiP) == touches and array.size(loP) == touches
+    hMax = array.max(hiP)
+    hMin = array.min(hiP)
+    lMax = array.max(loP)
+    lMin = array.min(loP)
+    tol  = tolMult * atr
+    top  = hMax
+    bot  = lMin
+    h    = top - bot
+    start = math.min(array.min(hiB), array.min(loB))
+    span  = math.min(bar_index - start + 1, 500)
+    // No close outside the proposed box since it began.
+    clean = true
+    for i = 0 to span - 1
+        if close[i] > top + brkBuf * atr or close[i] < bot - brkBuf * atr
+            clean := false
+            break
+    ok = (hMax - hMin) <= tol and (lMax - lMin) <= tol and h >= minH * atr and h <= maxH * atr and er <= erMax and clean
+    if ok
+        active := true
+        newRange := true
+        rTop := top
+        rBot := bot
+        mid = (top + bot) / 2
+        rBox := box.new(start, top, bar_index, bot, border_color=colEdge, bgcolor=colRange)
+        if showMid
+            rMid := line.new(start, mid, bar_index, mid, color=colEdge, style=line.style_dashed)
+        if showDev and devPct > 0
+            d = h * devPct / 100.0
+            rDevT := line.new(start, top + d, bar_index, top + d, color=color.new(colEdge, 50), style=line.style_dotted)
+            rDevB := line.new(start, bot - d, bar_index, bot - d, color=color.new(colEdge, 50), style=line.style_dotted)
+
+// 2) Manage an active range: extend until a close beyond edge + buffer.
+else if active
+    buf = brkBuf * atr
+    if close > rTop + buf
+        brkUp := true
+    else if close < rBot - buf
+        brkDn := true
+    if brkUp or brkDn
+        active := false
+        box.set_right(rBox, bar_index)
+        box.set_border_color(rBox, brkUp ? colUp : colDn)
+        label.new(bar_index, brkUp ? low : high, brkUp ? "▲ break" : "▼ break",
+                  style=brkUp ? label.style_label_up : label.style_label_down,
+                  color=brkUp ? colUp : colDn, textcolor=color.white, size=size.tiny)
+        if not na(rMid)
+            line.set_x2(rMid, bar_index)
+        if not na(rDevT)
+            line.set_x2(rDevT, bar_index)
+            line.set_x2(rDevB, bar_index)
+    else
+        box.set_right(rBox, bar_index)
+        if not na(rMid)
+            line.set_x2(rMid, bar_index)
+        if not na(rDevT)
+            line.set_x2(rDevT, bar_index)
+            line.set_x2(rDevB, bar_index)
+
+// ── Plots / alerts ────────────────────────────────────────────────────────
+plot(active ? rTop : na, "Range high", color=colEdge, style=plot.style_linebr, display=display.status_line)
+plot(active ? rBot : na, "Range low",  color=colEdge, style=plot.style_linebr, display=display.status_line)
+
+alertcondition(newRange, "Range formed", "Range formed on {{ticker}} {{interval}}")
+alertcondition(brkUp,    "Range break up",   "Range break UP on {{ticker}} {{interval}}")
+alertcondition(brkDn,    "Range break down", "Range break DOWN on {{ticker}} {{interval}}")
